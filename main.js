@@ -673,10 +673,7 @@ function startGame() {
 }
 
 function checkSourceVersion() {
-	GameData.Automata.FormulaeInjector["BoostingUpgrades"] = {
-		autoClickerBoosterLevel: 0,
-		autoClickerBoosterCost: 4284866
-	}
+	
 }
 
 startGame();
