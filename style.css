@@ -120,6 +120,29 @@ h4 {
 	margin-block-end: 1px;
 }
 
+.setingsContainer {
+	margin: 10px 25%;
+	padding: 0px;
+	border: 0px hidden;
+	display: flex;
+	justify-content: center;
+}
+
+.settingsButton {
+	border: 0px hidden #000;
+	border-radius: 9px;
+	background-color: #0ff;
+	font-size: 15px;
+	padding: 2px 8px;
+	transition: font-size 0.3s;
+}
+
+.settingsButton:hover {
+	background-color: #3dd;
+	color: #600;
+	font-size: 16px;
+}
+
 .tooltip {
 	position: relative;
 }

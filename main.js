@@ -456,7 +456,7 @@ var GameData = {
 	sourceVersion: {
 		major: 0,
 		minor: 0,
-		patch: 0,
+		patch: 1,
 		sequence: "inDev"
 	},
 	matter: new HighNumber(),
@@ -466,7 +466,8 @@ var GameData = {
 	condenser: new HighNumber(),
 	Panels: [
 		StateEnum.CanBeEnabled,
-		StateEnum.Disabled
+		StateEnum.Disabled,
+		StateEnum.CanBeEnabled
 	],
 	BasicUpgrades: {
 		StandardUpgrades: {
@@ -585,8 +586,13 @@ window.setInterval(function() {
 window.setInterval(function() {
 	updateComponents()
 }, 28)
+
+function save() {
+	localStorage.setItem("141517c683ff5e4876dcfb67af0ce03a30243c94dd1cd1efd78275d824e1d08b-incrementalBetter_matterMinerGetterGameSave_save_0xffdd00/4f19737a1600963a370d9cd617152cc54691d75e8376e2facf9403ec323e1b81", JSON.stringify(GameData))
+}
+
 var saveGameLoop = window.setInterval(function() {
-    localStorage.setItem("141517c683ff5e4876dcfb67af0ce03a30243c94dd1cd1efd78275d824e1d08b-incrementalBetter_matterMinerGetterGameSave_save_0xffdd00/4f19737a1600963a370d9cd617152cc54691d75e8376e2facf9403ec323e1b81", JSON.stringify(GameData))
+    save()
 }, 60000)
 
 //#endregion
@@ -597,7 +603,7 @@ function init() {
 		sourceVersion: {
 			major: 0,
 			minor: 0,
-			patch: 0,
+			patch: 1,
 			sequence: "inDev"
 		},
 		matter: new HighNumber(),
@@ -607,7 +613,8 @@ function init() {
 		condenser: new HighNumber(),
 		Panels: [
 			StateEnum.CanBeEnabled,
-			StateEnum.Disabled
+			StateEnum.Disabled,
+			StateEnum.CanBeEnabled
 		],
 		BasicUpgrades: {
 			StandardUpgrades: {
@@ -673,7 +680,17 @@ function startGame() {
 }
 
 function checkSourceVersion() {
-	
+	let curver = {
+		major: 0,
+		minor: 0,
+		patch: 1,
+		sequence: "inDev"
+	}
+	if (GameData.sourceVersion.major != curver.major || GameData.sourceVersion.minor != curver.minor || GameData.sourceVersion.patch != curver.patch || GameData.sourceVersion.sequence != curver.sequence) {
+		GameData.Panels.push(StateEnum.CanBeEnabled)
+		GameData.sourceVersion = curver
+		save()
+	}
 }
 
 startGame();
@@ -727,6 +744,7 @@ class Panel {
 	}
 
 	update() {
+		if (this.domObject.classList.contains("noUpdate")) return
 		let tmp = 0;
 		this.components.button.forEach(toUpdate => {
 			tmp = new HighNumber(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, eval(toUpdate.id)[toUpdate.attributes.getNamedItem("costSource").value])
