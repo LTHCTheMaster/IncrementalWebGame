@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" translate="no">
+<head>
+	<meta charset="UTF-8" http-equiv="X-UA-Compatible" name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<p class="isComponent" id="oneleft" defaultText="Matter" source="matter">0 Matter</p>
+	<br>
+
+	<button onclick="getMatter(true);" class="isComponent upbutton enabled toggleGetMatter" id="noUpdate">Get Matter</button>
+
+	<div class="panelselector">
+		<button class="isComponent panelbutton pdisabled">Standard Matter Upgrades</button>
+		<button class="isComponent panelbutton pdisabled">Automata</button>
+	</div>
+
+	<div class="panel panelhidden" id="panel0">
+		<div class="upgrades">
+			<h4>Basic Upgrades</h4>
+	
+			<div class="fullupgradesBlock">
+				<h4>Standard Upgrades</h4>
+	
+				<div class="upgradesBlock">
+					<div class="subupgrades">
+						<h4>Upgrades</h4>
+	
+						<button onclick="upgradeMatterProduction()" class="isComponent upbutton disabled tooltip" id="GameData.BasicUpgrades.StandardUpgrades.Upgrades" header="Matter Production Upgrade" levelSource="matterProductionLevel" costSource="matterProductionCost" tooltipText="Increase how many matter you gain.">Matter Production Upgrade (Level 0): 10 Matter</button>
+						<br>
+						<button onclick="upgradeAutoGetter()" class="isComponent upbutton disabled tooltip" id="GameData.BasicUpgrades.StandardUpgrades.Upgrades" header="Auto Getter" levelSource="autoGetterLevel" costSource="autoGetterCost" tooltipText="Deform all grids of the universe to periodically generate matter.">Auto Getter (Level 0): 125 Matter</button>
+						<br>
+						<button onclick="upgradeMatterGrid()" class="isComponent upbutton disabled tooltip" id="GameData.BasicUpgrades.StandardUpgrades.Upgrades" header="Matter Grid" levelSource="matterGridLevel" costSource="matterGridCost" tooltipText="Add a new grid to the universe, each new grid manipulate matter and time.">Matter Grid (Level 0): 15 Matter</button>
+					</div>
+	
+					<div class="subupgrades">
+						<h4>Boosting Upgrades</h4>
+	
+						<button onclick="upgradePrimalCondenser()" class="isComponent upbutton disabled tooltip" id="GameData.BasicUpgrades.StandardUpgrades.BoostingUpgrades" header="Primal Condenser" levelSource="primalCondenserLevel" costSource="primalCondenserCost" tooltipText="When all grids are luckily wrongly placed. This error allow you to get more matter by getting matter.">Primal Condenser (Level 0): 1024 Matter</button>
+						<br>
+						<button onclick="upgradeTimeRefactoring()" class="isComponent upbutton disabled tooltip" id="GameData.BasicUpgrades.StandardUpgrades.BoostingUpgrades" header="Time Refactoring" levelSource="timeRefactoringLevel" costSource="timeRefactoringCost" tooltiptext="Get one shard of grid and fuse them with another grid.">Time Refactoring (Level 0): 8765 Matter</button>
+					</div>
+				</div>
+			</div>
+	
+			<div class="fullupgradesBlock">
+				<h4>Virtualizing Process</h4>
+	
+				<div class="upgradesBlock">
+					<div class="subupgrades">
+						<h4>Modules</h4>
+	
+						<button onclick="upgradePentagonModule()" class="isComponent upbutton disabled tooltip" id="GameData.BasicUpgrades.VirtualizingProcess.Modules" header="Pentagon Module" levelSource="pentagonModuleLevel" costSource="pentagonModuleCost" tooltiptext="You have the ability to deform all deformations you've made before to periodically get more matter.">Pentagon Module (Level 0): 25000 Matter</button>
+						<br>
+						<button onclick="upgradeMatterGridBreaker()" class="isComponent upbutton disabled tooltip" id="GameData.BasicUpgrades.VirtualizingProcess.Modules" header="Matter Grid Breaker" levelSource="matterGridBreakerLevel" costSource="matterGridBreakerCost" tooltiptext="You found how to break the main matter axis of all grids and use them in a time formula to periodically get matter. More grid you have more matter you generate.">Matter Grid Breaker (Level 0): 32768 Matter</button>
+					</div>
+	
+					<div class="subupgrades">
+						<h4>Mixing</h4>
+	
+						<button onclick="upgradeMixingMatrix()" class="isComponent upbutton disabled tooltip" id="GameData.BasicUpgrades.VirtualizingProcess.Mixing" header="Mixing Matrix" levelSource="mixingMatrixLevel" costSource="mixingMatrixCost" tooltiptext="Put some pentagons with some breaking formulae in a cauldron, stir 2 times counterclockwise, burn this strange result and voila. The power of this strange illogical object is unknown.">Mixing Matrix (Level 0): 64000 Matter</button>
+						<br>
+						<button onclick="upgradeOvercondensedRefactoringMixer()" class="isComponent upbutton disabled tooltip" id="GameData.BasicUpgrades.VirtualizingProcess.Mixing" header="Overcondensed Refactoring Mixer" levelSource="overcondensedRefactoringMixerLevel" costSource="overcondensedRefactoringMixerCost" tooltiptext="You found how to combine Primal Condenser and Time Refactoring to create a somewhat unreal &#x22;overpowered&#x22; object.">Overcondensed Refactoring Mixer (Level 0): 131072 Matter</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panelhidden" id="panel1">
+		<div class="upgrades">
+			<h4>Automata</h4>
+	
+			<div class="fullupgradesBlock">
+				<h4>Formulae Injector</h4>
+	
+				<div class="upgradesBlock">
+					<div class="subupgrades">
+						<h4>Clicker</h4>
+	
+						<button onclick="upgradeAutoClicker()" class="isComponent upbutton disabled tooltip" id="GameData.Automata.FormulaeInjector.Clicker" header="Auto Clicker" levelSource="autoClickerLevel" costSource="autoClickerCost" tooltipText="Why do you want to click on this button by yourself ?">Auto Clicker (Level 0): 2 147 483 Matter</button>
+					</div>
+
+					<div class="subupgrades">
+						<h4>Boosting Upgrades</h4>
+	
+						<button onclick="upgradeAutoClickerBooster()" class="isComponent upbutton disabled tooltip" id="GameData.Automata.FormulaeInjector.BoostingUpgrades" header="Auto Clicker Booster" levelSource="autoClickerBoosterLevel" costSource="autoClickerBoosterCost" tooltipText="">Auto Clicker Booster (Level 0): 4 284 866 Matter</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="main.js" charset="utf-8" type="text/javascript"></script>
+</body>
+</html>
