@@ -1,6 +1,62 @@
 body {
+	margin: 2px;
+	padding: 0px 2px;
 	background-color: #000;
 	color: #fff;
+	display: flex;
+	overflow-x: hidden;
+}
+
+.screenpart {
+	display: block;
+	margin: 0px;
+	padding: 0px;
+	border: 0px hidden;
+	height: 100%;
+	width: 75%;
+}
+
+.otherscreenpart {
+	display: block;
+	margin: 0px;
+	padding: 0px;
+	border: 0px hidden;
+	height: 100%;
+	width: 25%;
+}
+
+.notification {
+	visibility: hidden;
+	margin: 1em 0px 0px 100%;
+	border: 0px hidden;
+	border-radius: 10px;
+	background-color: #350;
+	width: 50%;
+	height: max-content;
+	max-height: 60px;
+	color: #cfdfef;
+	transition: margin 0.5s;
+}
+
+#notificationtext {
+	margin: 0px 0px 0px 100%;
+	font-size: 19px;
+	text-align: center;
+	transition: margin-left 0.75s;
+}
+
+#notificationbody {
+	margin: -1px 0px 4px 3px;
+	font-size: 13px;
+}
+
+.notificationshow {
+	visibility: visible;
+	margin: 1em 32% 0px 18%;
+}
+
+.notificationshow #notificationtext {
+	margin-left: 0px;
 }
 
 .upbutton {

@@ -20,6 +20,8 @@ StateEnum.Disabled = -1;
 StateEnum.Switchable = 0;
 StateEnum.CanBeEnabled = 1;
 
+const PANELPARENT = document.body.getElementsByClassName("screenpart").item(0)
+
 //#endregion
 
 //#region GameData
@@ -587,12 +589,20 @@ window.setInterval(function() {
 	updateComponents()
 }, 28)
 
-function save() {
+function save(fromButton) {
+	if (fromButton) {
+		switchPanelAction(2)
+		updateComponents()
+	}
 	localStorage.setItem("141517c683ff5e4876dcfb67af0ce03a30243c94dd1cd1efd78275d824e1d08b-incrementalBetter_matterMinerGetterGameSave_save_0xffdd00/4f19737a1600963a370d9cd617152cc54691d75e8376e2facf9403ec323e1b81", JSON.stringify(GameData))
+	if (fromButton) {
+		switchPanelAction(2)
+		updateComponents()
+	}
 }
 
 var saveGameLoop = window.setInterval(function() {
-    save()
+    save(false)
 }, 60000)
 
 //#endregion
@@ -717,15 +727,48 @@ function getComponents(domObject, componentsTypes) {
 	return output
 }
 
+class ButtonInPanel {
+	constructor(domObject) {
+		this.domObject = domObject
+		this.costSource = domObject.attributes.getNamedItem("costSource").value
+		this.levelSource = domObject.attributes.getNamedItem("levelSource").value
+		this.header = domObject.attributes.getNamedItem("header").value
+		this.parentInGameData = domObject.id
+
+		if (domObject.classList.contains("tooltip")) {
+			let tooltipText = domObject.attributes.getNamedItem("tooltipText").value
+			this.tooltipSpan = document.createElement('span')
+			this.tooltipSpan.classList.add('tooltiptext')
+			this.tooltipSpan.innerText = tooltipText
+		}
+		else {
+			this.tooltipSpan = 0
+		}
+	}
+
+	async update() {
+		let tmp = new HighNumber(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, eval(this.parentInGameData)[this.costSource])
+		this.domObject.innerText = this.header + " (Level " + eval(this.parentInGameData)[this.levelSource] + "): " + tmp.toString() + " Matter"
+		switchState(this.domObject, tmp)
+	}
+
+	async tooltip() {
+		if (this.tooltipSpan === 0) return;
+		this.domObject.appendChild(this.tooltipSpan)
+	}
+}
+
 class Panel {
 	constructor(domObject) {
 		this.domObject = domObject;
-		this.components = getComponents(this.domObject, ["button"])
+		let tmp = getComponents(this.domObject, ["button"])
+		this.components = []
+		tmp.button.forEach(button => this.components.push(new ButtonInPanel(button)))
 		this.enabled = false;
 	}
 
 	async enable() {
-		document.body.appendChild(this.domObject)
+		PANELPARENT.appendChild(this.domObject)
 		this.enabled = true;
 		await sleep(28)
 		this.domObject.classList.replace("panelhidden", "panelvisible")
@@ -734,7 +777,7 @@ class Panel {
 	async disable() {
 		this.domObject.classList.replace("panelvisible", "panelhidden")
 		await sleep(28)
-		document.body.removeChild(this.domObject)
+		PANELPARENT.removeChild(this.domObject)
 		this.enabled = false;
 	}
 
@@ -743,15 +786,12 @@ class Panel {
 		else this.enable();
 	}
 
-	update() {
+	async update() {
 		if (this.domObject.classList.contains("noUpdate")) return
-		let tmp = 0;
-		this.components.button.forEach(toUpdate => {
-			tmp = new HighNumber(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, eval(toUpdate.id)[toUpdate.attributes.getNamedItem("costSource").value])
-			toUpdate.innerText = toUpdate.attributes.getNamedItem("header").value +" (Level " + eval(toUpdate.id)[toUpdate.attributes.getNamedItem("levelSource").value] + "): " + tmp.toString() + " Matter"
-			switchState(toUpdate, tmp)
+		this.components.forEach(toUpdate => {
+			toUpdate.update()
 		});
-		putTooltip(this.components.button)
+		putTooltip(this.components)
 	}
 }
 
@@ -762,7 +802,7 @@ class Tab {
 		this.button = button
 	}
 
-	update() {
+	async update() {
 		if (this.state != StateEnum.Disabled) {
 			if (this.state === StateEnum.Switchable) {
 				this.button.classList.replace("penabled", "pswitchable")
@@ -770,14 +810,12 @@ class Tab {
 				this.panel.update()
 			}
 			if (this.state === StateEnum.CanBeEnabled) {
-				this.button.classList.replace("pswitchable", "penabled")
-				this.button.classList.replace("pdisabled", "penabled")
+				if (!this.button.classList.replace("pswitchable", "penabled")) this.button.classList.replace("pdisabled", "penabled")
 			}
 		}
 		else {
 			if (this.panel.enabled) this.panel.switch();
-			this.button.classList.replace("pswitchable", "pdisabled")
-			this.button.classList.replace("penabled", "pdisabled")
+			if (!this.button.classList.replace("pswitchable", "pdisabled")) this.button.classList.replace("penabled", "pdisabled")
 		}
 	}
 
@@ -804,7 +842,7 @@ class Tab {
 
 function getPanels() {
 	let output = []
-	let tmp = document.getElementsByClassName("panel")
+	let tmp = PANELPARENT.getElementsByClassName("panel")
 	for (let i = 0; i < tmp.length; i++) output.push(new Panel(tmp[i]));
 	output.forEach(panel => panel.disable())
 	return output
@@ -858,8 +896,8 @@ function updateComponents() {
 	});
 	GameData.Panels = []
 	Components.tabs.forEach(tab => {
-		if (tab.panel.domObject.id == "panel1" && tab.state == StateEnum.Disabled) {
-			if (GameData.matter.greaterEquals(FOURMILLION)) tab.setState(StateEnum.CanBeEnabled)
+		if (tab.state == StateEnum.Disabled) {
+			if (tab.panel.domObject.id == "panel1") if (GameData.matter.greaterEquals(FOURMILLION)) tab.setState(StateEnum.CanBeEnabled)
 		}
 		tab.update()
 		GameData.Panels.push(tab.state)
@@ -868,13 +906,7 @@ function updateComponents() {
 
 function putTooltip(buttonCollectionObject) {
 	buttonCollectionObject.forEach(toUpdate => {
-		if (toUpdate.classList.contains("tooltip")) {
-			let tooltipText = toUpdate.attributes.getNamedItem("tooltipText").value
-			let tmpSpan = document.createElement('span')
-			tmpSpan.classList.add('tooltiptext')
-			tmpSpan.innerText = tooltipText
-			toUpdate.appendChild(tmpSpan)
-		}
+		toUpdate.tooltip()
 	})
 }
 
@@ -1109,3 +1141,10 @@ function upgradeAutoClickerBooster() {
 
 updateComponents();
 updateLoopTime();
+
+// async function hoho() {
+// 	await sleep(3000)
+// 	document.body.getElementsByClassName("notification").item(0).classList.add("notificationshow")
+// }
+
+// hoho()
