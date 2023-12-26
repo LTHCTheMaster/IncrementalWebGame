@@ -33,18 +33,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v4
-      - name: Upload index
+      - name: Upload artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './index.html'
-      - name: Upload style
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './style.css'
-      - name: Upload main
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './main.js'
+          path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
