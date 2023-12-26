@@ -21,6 +21,7 @@ StateEnum.Switchable = 0;
 StateEnum.CanBeEnabled = 1;
 
 const PANELPARENT = document.body.getElementsByClassName("screenpart").item(0)
+const NOTIFICATIONPARENT = document.body.getElementsByClassName("otherscreenpart").item(0)
 
 //#endregion
 
@@ -727,6 +728,32 @@ function getComponents(domObject, componentsTypes) {
 	return output
 }
 
+class Notification {
+	constructor(title, body) {
+		this.notificationToast = document.createElement("div")
+		this.notificationToast.classList.add("notification")
+
+		let ltitle = document.createElement("p")
+		ltitle.classList.add("title")
+		ltitle.id = "notificationtext"
+		ltitle.innerText = title
+		this.notificationToast.appendChild(ltitle)
+
+		let lbody = document.createElement("p")
+		lbody.classList.add("body")
+		lbody.id = "notificationbody"
+		lbody.innerText = body
+		this.notificationToast.appendChild(lbody)
+	}
+
+	async show() {
+		NOTIFICATIONPARENT.appendChild(this.notificationToast)
+		await sleep(14)
+		NOTIFICATIONPARENT.getElementsByClassName("notification").item(NOTIFICATIONPARENT.getElementsByClassName("notification").length - 1).classList.add("notificationshow")
+		await sleep(7)
+	}
+}
+
 class ButtonInPanel {
 	constructor(domObject) {
 		this.domObject = domObject
@@ -1144,7 +1171,8 @@ updateLoopTime();
 
 // async function hoho() {
 // 	await sleep(3000)
-// 	document.body.getElementsByClassName("notification").item(0).classList.add("notificationshow")
+// 	await new Notification("test1", "premier").show()
+// 	await new Notification("test2", "second").show()
 // }
 
 // hoho()
