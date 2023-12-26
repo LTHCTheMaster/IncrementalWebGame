@@ -36,15 +36,15 @@ jobs:
       - name: Upload index
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'index.html'
+          path: './index.html'
       - name: Upload style
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'style.css'
+          path: './style.css'
       - name: Upload main
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'main.js'
+          path: './main.js'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
