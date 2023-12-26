@@ -130,7 +130,7 @@ class HighNumber {
 			else return `${this.M} M`
 		}
 		if (this.K > 0) {
-			if (this.units > 99) return `${this.K}.${this.units.toString()[0]} K`
+			if (this.units > 99) return `${this.K}.${this.units.toString()[0]} k`
 			else return `${this.K} K`
 		}
 		return `${this.units} `
