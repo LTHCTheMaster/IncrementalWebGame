@@ -22,6 +22,7 @@ StateEnum.CanBeEnabled = 1;
 
 const PANELPARENT = document.body.getElementsByClassName("screenpart").item(0)
 const NOTIFICATIONPARENT = document.body.getElementsByClassName("otherscreenpart").item(0)
+const BUTTON_TOGGLE_MATTER = document.getElementsByClassName("toggleGetMatter")[0]
 
 //#endregion
 
@@ -521,11 +522,11 @@ var GameData = {
 //#endregion
 
 //#region Loops
-function gameLoopMain() {
+async function gameLoopMain() {
 	for (let i = -1; i < GameData.BasicUpgrades.VirtualizingProcess.Modules.matterGridBreakerLevel * GameData.BasicUpgrades.VirtualizingProcess.Modules.pentagonModuleLevel * GameData.BasicUpgrades.VirtualizingProcess.Mixing.mixingMatrixLevel; i++) subGameLoopAutoGettersPart();
 }
 
-function subGameLoopAutoGettersPart() {
+async function subGameLoopAutoGettersPart() {
 	if (GameData.autoGetters > 0) {
 		if (GameData.BasicUpgrades.VirtualizingProcess.Modules.pentagonModuleLevel > 0 && GameData.BasicUpgrades.StandardUpgrades.Upgrades.autoGetterLevel > 4) for (let i = 0; i < GameData.autoGetters + (GameData.BasicUpgrades.StandardUpgrades.Upgrades.autoGetterLevel - GameData.BasicUpgrades.StandardUpgrades.Upgrades.autoGetterLevel % 5) / 5 * GameData.BasicUpgrades.VirtualizingProcess.Modules.pentagonModuleLevel; i++) getMatter(false)
 		else for (let i = 0; i < GameData.autoGetters; i++) getMatter(false);
@@ -534,7 +535,7 @@ function subGameLoopAutoGettersPart() {
 
 const TWO_HighNumber = new HighNumber(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2)
 
-function matterGridBreakerLoop() {
+async function matterGridBreakerLoop() {
 	let matterToAdd = GameData.matterPerClick.copy()
 	if (matterToAdd.modulo(TWO_HighNumber).equals(ONE_HighNumber)) {
 		matterToAdd.iEuclideanDivide(TWO_HighNumber)
@@ -556,7 +557,7 @@ var loopMatterGridBreaker = window.setInterval(function() {
 	matterGridBreakerLoop()
 }, Math.ceil(max(GameData.tickDuration, 10) * 0.9))
 
-function updateLoopTime() {
+async function updateLoopTime() {
 	window.clearInterval(mainGameLoop)
 	window.clearInterval(loopMatterGridBreaker)
 	mainGameLoop = window.setInterval(function() {
@@ -567,9 +568,7 @@ function updateLoopTime() {
 	}, Math.ceil(max(GameData.tickDuration, 10) * 0.9))
 }
 
-function ms200Loop() {
-	getMatterButtonState = true
-	document.getElementsByClassName("toggleGetMatter")[0].classList.replace("disabled", "enabled")
+async function ms200Loop() {
 	if (GameData.Automata.FormulaeInjector.Clicker.autoClickerLevel > 0) {
 		getMatter(true);
 		for (let i = 1; i < GameData.Automata.FormulaeInjector.Clicker.autoClickerLevel; i++) {
@@ -581,6 +580,10 @@ function ms200Loop() {
 			}
 		}
 	}
+	else {
+		getMatterButtonState = true
+		BUTTON_TOGGLE_MATTER.classList.replace("disabled", "enabled")
+	}
 }
 
 window.setInterval(function() {
@@ -590,7 +593,7 @@ window.setInterval(function() {
 	updateComponents()
 }, 28)
 
-function save(fromButton) {
+async function save(fromButton) {
 	if (fromButton) {
 		switchPanelAction(2)
 		updateComponents()
@@ -915,7 +918,7 @@ function switchPanelAction(panelID) {
 
 const FOURMILLION = new HighNumber(0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0)
 
-function updateComponents() {
+async function updateComponents() {
 	Components.texts.forEach(txt => {
 		if (txt.id == "oneleft") {
 			txt.innerText = GameData[txt.attributes.getNamedItem("source").value].toString() + txt.attributes.getNamedItem("defaultText").value
@@ -931,13 +934,13 @@ function updateComponents() {
 	});
 }
 
-function putTooltip(buttonCollectionObject) {
+async function putTooltip(buttonCollectionObject) {
 	buttonCollectionObject.forEach(toUpdate => {
 		toUpdate.tooltip()
 	})
 }
 
-function switchState(cTU, val) {
+async function switchState(cTU, val) {
 	if (GameData.matter.greaterEquals(val)) cTU.classList.replace("disabled", "enabled");
 	else cTU.classList.replace("enabled", "disabled");
 }
@@ -970,7 +973,7 @@ function getMatter(button_source) {
 	if (button_source) {
 		if (getMatterButtonState) {
 			GameData.matter.iAdd(GameData.matterPerClick)
-			document.getElementsByClassName("toggleGetMatter")[0].classList.replace("enabled", "disabled")
+			BUTTON_TOGGLE_MATTER.classList.replace("enabled", "disabled")
 			getMatterButtonState = false
 			condenseMatter()
 		}
